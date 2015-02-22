@@ -102,6 +102,9 @@ pollutantmean <- function(directory = "specdata", pollutant = "sulfate", id = 1:
 Peer Assesment Assignment:
 --------------------------
 
+#the below link thrown light to understand the concept in discussion forums
+https://class.coursera.org/rprog-011/forum/search?q=cache+not+working#15-state-query=cache+not+working
+
 Their Sample:
 
 makeVector <- function(x = numeric()) {
