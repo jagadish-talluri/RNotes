@@ -176,3 +176,59 @@ m
 > cachemean(spl.vector)
 getting cached data
 [1] 3.5
+
+cachematrix.R
+-------------
+# function to create a special matrix to cache its inverse
+makeCacheMatrix <- function(x = matrix()) {
+  i <- NULL
+  set <- function(y) {
+    x <<- y
+    i <<- NULL
+  }
+  get <- function() x
+  setInverse <- function(inv) i <<- inv
+  getInverse <- function() i
+  list(set = set, get = get,
+       setInverse = setInverse,
+       getInverse = getInverse)
+}
+
+
+# function to calculate the inverse of a special matrix
+cacheSolve <- function(x, ...) {
+  i <- x$getInverse()
+  if(!is.null(i)) {
+    message("getting cached data")
+    return(i)
+  }
+  data <- x$get()
+  i <- solve(data)
+  x$setInverse(i)
+  i
+} 
+
+testCacheMatrix.R
+-----------------
+# Test your code
+source("cachematrix.R")
+#
+# generate matrix, and the inverse of the matrix.
+size <- 1000 # size of the matrix edge, don't make this too big
+mymatrix <- matrix(rnorm(size^2), nrow=size, ncol=size)
+mymatrix.inverse <- solve(mymatrix)
+#
+# now solve the matrix via the cache-method
+#
+special.matrix   <- makeCacheMatrix(mymatrix)
+#
+# this should take long, since it's the first go
+special.solved.1 <- cacheSolve(special.matrix)
+#
+# this should be lightning fast
+special.solved.2 <- cacheSolve(special.matrix)
+#
+# check if all solved matrices are identical
+identical(mymatrix.inverse, special.solved.1) & identical(mymatrix.inverse, special.solved.2)
+#
+# should return TRUE
