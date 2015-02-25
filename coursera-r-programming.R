@@ -286,7 +286,7 @@ best("TX", "heart attack")
 
 rankhospital.R
 --------------
-
+# this function is nothing but oneline less than best.R function, it is reused
 selectDF <- function(state, outcome) {
   
   df.outcome <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
@@ -329,7 +329,7 @@ selectDF <- function(state, outcome) {
   df.outcome
 }
 
-
+# this function depends on best/selectDF function
 rankhospital <- function(state, outcome, num = "best") {
   
   # this function is depends on best.R function
@@ -365,6 +365,7 @@ rankhospital("TX", "heart attack", "worst")
 rankhospital("TX", "heart failure", "4")
 rankhospital("TX", "heart failure", "3")
 
+# this function depends on rankhospital.R and inturn depends on best.R/selectDF functions
 rankall.R
 ---------
 
