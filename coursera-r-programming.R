@@ -235,3 +235,155 @@ special.solved.2 <- cacheSolve(special.matrix)
 identical(mymatrix.inverse, special.solved.1) & identical(mymatrix.inverse, special.solved.2)
 #
 # should return TRUE
+
+Assignment 3:
+-------------
+
+best.R
+------
+
+best <- function(state, outcome) {
+  
+  df.outcome <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
+  
+  # storing the unique states and unique outcomes
+  # for future validations
+  master.state <- unique(df.outcome[,7])
+  master.outcome <- c("heart attack", "heart failure", "pneumonia")
+  
+  # here we are summing the logical vector
+  # valid means 1(1 == TRUE) will be stored
+  # is there any other way?
+  valid.state <- sum(master.state == state)
+  valid.outcome <- sum(master.outcome == outcome)
+  
+  # !(0 == FALSE) == TRUE, to enter function
+  # can also be written as if(valid.state ==0)
+  if(!valid.state){stop('invalid state')}
+  if(!valid.outcome){stop('invalid outcome')}
+ 
+  # preparing the dynamic coloumn
+  col.name <- "Hospital.30.Day.Death..Mortality..Rates.from"
+  outcome.name <- if(outcome == "heart attack"){"Heart.Attack"}
+                  else if(outcome == "heart failure"){"Heart.Failure"}
+                  else if(outcome == "pneumonia"){"Pneumonia"}
+  outcome.col.name <- paste(col.name,outcome.name,sep=".")
+  
+  # rewritting the required data, fiter by state, selection by columns
+  df.outcome <- df.outcome[df.outcome$State == state,c("Hospital.Name", "State", outcome.col.name)]
+  
+  # convert to numeric is the best way to convert 'Not Available' into 'NA'
+  df.outcome[,3] <- as.numeric(df.outcome[,3])
+  # remove NAs
+  df.outcome <- na.omit(df.outcome)
+  
+  # order by 3 col(rate) and then 1 col(hospital.name) -- tricky line
+  df.outcome <- df.outcome[order(df.outcome[, 3], df.outcome[, 1]), ]
+  df.outcome[1,1]
+}
+
+best("TX", "heart attack")
+
+rankhospital.R
+--------------
+
+selectDF <- function(state, outcome) {
+  
+  df.outcome <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
+  
+  # storing the unique states and unique outcomes
+  # for future validations
+  master.state <- unique(df.outcome[,7])
+  master.outcome <- c("heart attack", "heart failure", "pneumonia")
+  
+  # here we are summing the logical vector
+  # valid means 1(1 == TRUE) will be stored
+  # is there any other way?
+  valid.state <- sum(master.state == state)
+  valid.outcome <- sum(master.outcome == outcome)
+  
+  # !(0 == FALSE) == TRUE, to enter function
+  # can also be written as if(valid.state ==0)
+  if(!valid.state){stop('invalid state')}
+  if(!valid.outcome){stop('invalid outcome')}
+  
+  # preparing the dynamic coloumn
+  col.name <- "Hospital.30.Day.Death..Mortality..Rates.from"
+  outcome.name <- if(outcome == "heart attack"){"Heart.Attack"}
+  else if(outcome == "heart failure"){"Heart.Failure"}
+  else if(outcome == "pneumonia"){"Pneumonia"}
+  outcome.col.name <- paste(col.name,outcome.name,sep=".")
+  
+  # rewritting the required data, fiter by state, selection by columns
+  df.outcome <- df.outcome[df.outcome$State == state,c("Hospital.Name", "State", outcome.col.name)]
+  
+  # convert to numeric is the best way to convert 'Not Available' into 'NA'
+  df.outcome[,3] <- as.numeric(df.outcome[,3])
+  # remove NAs
+  df.outcome <- na.omit(df.outcome)
+  
+  # order by 3 col(rate) and then 1 col(hospital.name) -- tricky line
+  df.outcome <- df.outcome[order(df.outcome[, 3], df.outcome[, 1]), ]
+  
+  # return
+  df.outcome
+}
+
+
+rankhospital <- function(state, outcome, num = "best") {
+  
+  # this function is depends on best.R function
+  # source(best.R)
+  
+  df.outcome  <- selectDF(state, outcome)
+  
+  last.row <- nrow(df.outcome)
+  
+  if(num == "best"){
+    
+  df.outcome[1, 1]
+    
+  } else if (num == "worst"){
+    
+    df.outcome[last.row, 1]
+  
+  } else if (as.numeric(num) > last.row) {
+    
+    NA
+    
+  } else {
+    
+    df.outcome[as.numeric(num), 1]
+  
+  }
+  
+}
+
+rankhospital("TX", "heart attack")
+rankhospital("TX", "heart attack", "best")
+rankhospital("TX", "heart attack", "worst")
+rankhospital("TX", "heart failure", "4")
+rankhospital("TX", "heart failure", "3")
+
+rankall.R
+---------
+
+rankall <- function(outcome, num = "best") {
+  
+  df.outcome <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
+  state <- unique(df.outcome[,7])
+  size <- length(state)
+  hospital <- character(size)
+  
+  for(i in 1:size) {
+    
+    hospital[i] <- rankhospital(state[i], outcome, num)
+    
+  }
+  
+  df <- data.frame(hospital,state)
+  df[order(df[,2]),]
+}
+
+
+rankall("heart attack", 20)
