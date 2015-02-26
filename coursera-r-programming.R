@@ -373,18 +373,38 @@ rankall <- function(outcome, num = "best") {
   
   df.outcome <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
   state <- unique(df.outcome[,7])
-  size <- length(state)
-  hospital <- character(size)
   
-  for(i in 1:size) {
-    
-    hospital[i] <- rankhospital(state[i], outcome, num)
-    
-  }
+# BELOW VARIABLES ARE NEEDED TO RUN THE `FOR LOOP`  
+  
+#   size <- length(state)
+#   hospital <- character(size)
+  
+#   this.outcome <- outcome
+#   this.num <- num
+
+# for loop, to run the function multiple times
+# observation: same output with NUMBERS AS INDEX
+  
+#   for(i in 1:size) {
+#     
+#     hospital[i] <- rankhospital(state[i], outcome, num)
+#     
+#   }
+
+# this is the alternative to the `for loop` above
+# observation: same output with `state names` AS INDEX (named index)
+# this is working you dont need to have seperate variables like this.outcome, this.num
+# it is handlind the scopes will LHS == ARG of called function, RHS == INPUT VARIABLE of the current function
+
+  hospital <- sapply(state, rankhospital, outcome = outcome, num = num)
   
   df <- data.frame(hospital,state)
   df[order(df[,2]),]
+# the output may contain NAs in hospital column as some state may not have
+# hospitals at that high ranks, therefore NAs are returned by internal called functions
+
 }
 
 
 rankall("heart attack", 20)
+
