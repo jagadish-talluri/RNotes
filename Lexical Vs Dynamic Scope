@@ -1,0 +1,50 @@
+In JAVA
+----------------------------------------------------------
+class  scoope
+{
+	
+	static int p = 10;
+
+	public static void main(String[] args) 
+	{
+	
+	f(Integer.parseInt(args[0]));
+
+	}
+
+
+	public static void f(int x){
+
+		p = 2;
+		System.out.println(p^2+g(x));
+}
+
+	public static int g(int x){
+
+		return x*p;
+}
+}
+----------- OUTPUT
+$ java scoope 3
+10
+
+
+In R
+-------
+
+y <- 10
+
+f <- function(x){
+  
+    p <- 2
+    p^2+g(x)
+    
+}
+
+g <- function(x){
+  
+  x*p
+}
+--------
+f(3)
+34
