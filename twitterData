@@ -1,0 +1,23 @@
+Login to -> https://apps.twitter.com/
+
+With you Twitter Credentials.
+
+	Click on Create New App
+	Fill the blanks with sensible details
+	Update you mobile number if not already done. (https://support.twitter.com/articles/110250-adding-your-mobile-number-to-your-account-via-web#)
+	How to use Twitter SMS commands (https://support.twitter.com/groups/34-apps-sms-and-mobile/topics/153-twitter-via-sms/articles/14020-twitter-for-sms-basic-features#)
+	Use this URL as it is mandatory (http://example.com/) and as we may not have an URL at present
+	Copy the Consumer-Key and Consumer-Secret, mine are (YMDIqM4AxX1MxlO649L1yfbVU   and    Anvsafl7EVSwVbro4e5LbLkJI9ysmEthbM4N4VdwMIm6efvAbg)
+	Copy Request-Token-URL and Authorize-URL, mine are (https://api.twitter.com/oauth/request_token and https://api.twitter.com/oauth/authorize)
+	Go to Permission Tab, and change the setting to ‘Read, Write and Access direct messages’)
+	Go to ‘Key and Access Tokens’ Tab and generate Access-Tokens
+	Go to (https://dev.twitter.com/oauth/reference/get/oauth/authenticate) and Choose your App and generate OAuth Signature.
+	It leads you to another page, Click the button OAuth Signature.
+
+Open RStudio -> Download the Packages (bitops, RCurl, RJSONIO, twitteR and ROAuth)
+
+
+Some links
+
+http://thinktostart.com/twitter-authentification-with-r/#comment-80
+
