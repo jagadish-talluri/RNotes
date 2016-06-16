@@ -1,0 +1,24 @@
+R Quick Notes:
+-------------
+
+ACCESS FILES/FOLDERS
+
+http://www.statmethods.net/interface/workspace.html
+
+getwd() # print the current working directory - cwd 
+ls()    # list the objects in the current workspace
+
+setwd(mydirectory)      # change to mydirectory
+setwd("c:/docs/mydir")  # note / instead of \ in windows 
+setwd("/usr/rob/mydir") # on linux
+
+# load a workspace into the current session
+# if you don't specify the path, the cwd is assumed 
+load("myfile.RData")
+
+q() # quit R. You will be prompted to save the workspace.
+
+mydata = read.csv("mydata.csv")  # read csv file 
+
+ACCESS COLUMNS/DATA FRAMES
+
